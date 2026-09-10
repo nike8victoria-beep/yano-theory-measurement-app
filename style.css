@@ -1,0 +1,409 @@
+:root {
+  --color-primary: #2f6b3a;
+  --color-primary-dark: #1f4a27;
+  --color-bg: #f7f6f2;
+  --color-surface: #ffffff;
+  --color-text: #23291f;
+  --color-text-muted: #6b7268;
+  --color-border: #dfded6;
+  --color-danger: #b0452e;
+  --radius: 12px;
+  --spacing: 16px;
+  color-scheme: light;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif;
+  -webkit-tap-highlight-color: transparent;
+}
+
+#app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: var(--spacing);
+  padding-top: max(var(--spacing), env(safe-area-inset-top));
+  padding-bottom: max(var(--spacing), env(safe-area-inset-bottom));
+}
+
+.loading {
+  margin: auto;
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+}
+
+button {
+  font-family: inherit;
+  font-size: 1rem;
+  border-radius: var(--radius);
+  border: none;
+  padding: 14px 20px;
+  cursor: pointer;
+}
+
+button.primary {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+button.primary:active {
+  background: var(--color-primary-dark);
+}
+
+button.secondary {
+  background: var(--color-surface);
+  color: var(--color-primary-dark);
+  border: 1px solid var(--color-border);
+}
+
+button.secondary:active {
+  background: var(--color-bg);
+}
+
+button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: var(--spacing);
+}
+
+/* onboarding */
+
+.onboarding {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.onboarding-slide {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 12px;
+}
+
+.onboarding-icon {
+  font-size: 4rem;
+}
+
+.onboarding-slide h1 {
+  margin: 0;
+  font-size: 1.3rem;
+}
+
+.onboarding-slide p {
+  margin: 0;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+}
+
+.onboarding-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-border);
+}
+
+.dot.active {
+  background: var(--color-primary);
+}
+
+.onboarding-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.onboarding-actions button {
+  flex: 1;
+}
+
+/* site list */
+
+.site-list-view {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.site-list-header {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.site-list-header h1 {
+  margin: 0;
+  font-size: 1.3rem;
+}
+
+.site-list-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.site-row {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.site-row-label {
+  font-weight: bold;
+}
+
+.site-row-date {
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+}
+
+.observation-chip-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.observation-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  background: var(--color-bg);
+  border-radius: 8px;
+  padding: 6px 10px;
+}
+
+.obs-phase {
+  font-weight: bold;
+}
+
+.obs-date {
+  color: var(--color-text-muted);
+}
+
+.sync-badge {
+  margin-left: auto;
+  background: #f2c94c;
+  color: #4a3b06;
+  font-size: 0.75rem;
+  font-weight: bold;
+  border-radius: 999px;
+  padding: 2px 10px;
+}
+
+.empty-hint {
+  color: var(--color-text-muted);
+  text-align: center;
+  padding: 24px 0;
+}
+
+/* dummy view */
+
+.dummy-view {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* measurement flow (STEP1-4) */
+
+.step-view {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.step-progress {
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+  font-weight: bold;
+  letter-spacing: 0.02em;
+}
+
+.step-view h1 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.field-label {
+  font-weight: bold;
+  font-size: 0.9rem;
+  margin-top: 4px;
+}
+
+.text-input {
+  font-size: 1rem;
+  padding: 12px 14px;
+  border-radius: var(--radius);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text);
+}
+
+.gps-status {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.choice-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.choice-btn {
+  background: var(--color-surface);
+  border: 2px solid var(--color-border);
+  color: var(--color-text);
+  padding: 18px 8px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.choice-btn.active {
+  border-color: var(--color-primary);
+  background: #e9f2ea;
+  color: var(--color-primary-dark);
+}
+
+.photo-area {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+}
+
+.photo-preview {
+  max-width: 100%;
+  max-height: 320px;
+  border-radius: var(--radius);
+  display: block;
+}
+
+.hint {
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+.timer-display {
+  text-align: center;
+  font-size: 3rem;
+  font-weight: bold;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-primary-dark);
+}
+
+.timer-unit {
+  font-size: 1.2rem;
+  margin-left: 6px;
+  color: var(--color-text-muted);
+}
+
+.timer-actions {
+  display: flex;
+  justify-content: center;
+}
+
+.timer-actions button {
+  min-width: 160px;
+}
+
+.flag-warning {
+  background: #fbe9e4;
+  color: var(--color-danger);
+  border: 1px solid #e3b6a8;
+  border-radius: var(--radius);
+  padding: 12px 14px;
+  font-size: 0.9rem;
+}
+
+.step-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: auto;
+  padding-top: 8px;
+}
+
+.step-actions button {
+  flex: 1;
+}
+
+/* completion view (4.0) */
+
+.completion-view {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.completion-view h1 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.completion-view .card p {
+  margin: 2px 0 10px;
+}
+
+.comparison-card h2 {
+  margin: 0 0 12px;
+  font-size: 1.05rem;
+}
+
+.comparison-photos {
+  display: flex;
+  gap: 12px;
+}
+
+.comparison-photo-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: center;
+}
+
+.comparison-photo-label {
+  font-weight: bold;
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+.comparison-metric {
+  margin-top: 14px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.comparison-diff {
+  color: var(--color-primary-dark);
+}
