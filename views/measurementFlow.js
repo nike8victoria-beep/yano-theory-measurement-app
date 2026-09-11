@@ -13,9 +13,9 @@ const MAX_GPS_ACCURACY_M = 50;
  * finished draft so the caller (a later phase) can decide how to save it.
  *
  * @param {HTMLElement} container
- * @param {{ site: object|null, onCancel: () => void, onComplete: (draft: object) => void }} options
+ * @param {{ site: object|null, onCancel: () => void, onComplete: (draft: object) => void, onShowGuide?: () => void }} options
  */
-export function renderMeasurementFlow(container, { site, onCancel, onComplete }) {
+export function renderMeasurementFlow(container, { site, onCancel, onComplete, onShowGuide }) {
   const draft = {
     siteId: site ? site.id : crypto.randomUUID(),
     isNewSite: !site,
@@ -41,7 +41,7 @@ export function renderMeasurementFlow(container, { site, onCancel, onComplete })
 
   function renderCurrentStep() {
     if (step === 1) {
-      renderStep1(container, draft, { site, onCancel, onNext: () => goTo(2) });
+      renderStep1(container, draft, { site, onCancel, onNext: () => goTo(2), onShowGuide });
     } else if (step === 2) {
       renderStep2(container, draft, { onBack: () => goTo(1), onNext: () => goTo(3) });
     } else if (step === 3) {
@@ -65,7 +65,7 @@ function renderStepShell(container, { stepLabel, bodyHtml }) {
 
 // ---- STEP1: 地点情報 ----
 
-async function renderStep1(container, draft, { site, onCancel, onNext }) {
+async function renderStep1(container, draft, { site, onCancel, onNext, onShowGuide }) {
   renderStepShell(container, {
     stepLabel: 'STEP1 / 4 ・ 地点情報',
     bodyHtml: `
@@ -83,6 +83,7 @@ async function renderStep1(container, draft, { site, onCancel, onNext }) {
       <div class="field-label">位置情報</div>
       <div class="card gps-status" data-el="gps-status">取得中...</div>
       <button type="button" class="secondary" data-action="retry-gps" hidden>位置情報を再取得</button>
+      <button type="button" class="link-button" data-action="open-guide" hidden>うまく取得できない場合はこちら</button>
 
       <div class="field-label">計測フェーズ</div>
       <div class="choice-grid" data-group="phase">
@@ -124,11 +125,13 @@ async function renderStep1(container, draft, { site, onCancel, onNext }) {
 
   const statusEl = container.querySelector('[data-el="gps-status"]');
   const retryBtn = container.querySelector('[data-action="retry-gps"]');
+  const guideLinkBtn = container.querySelector('[data-action="open-guide"]');
   const nextBtn = container.querySelector('[data-action="next"]');
 
   function fetchLocation() {
     statusEl.textContent = '現在地を取得中...';
     retryBtn.hidden = true;
+    guideLinkBtn.hidden = true;
     nextBtn.disabled = true;
 
     if (!('geolocation' in navigator)) {
@@ -147,12 +150,16 @@ async function renderStep1(container, draft, { site, onCancel, onNext }) {
       (error) => {
         statusEl.textContent = `位置情報の取得に失敗しました(${error.message})`;
         retryBtn.hidden = false;
+        guideLinkBtn.hidden = !onShowGuide;
       },
       { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
     );
   }
 
   retryBtn.addEventListener('click', fetchLocation);
+  if (onShowGuide) {
+    guideLinkBtn.addEventListener('click', () => onShowGuide());
+  }
   nextBtn.addEventListener('click', onNext);
 
   fetchLocation();
@@ -276,7 +283,7 @@ function renderStep4(container, draft, { onBack, onComplete }) {
       stepLabel: 'STEP4 / 4 ・ 浸透タイマー',
       bodyHtml: `
         <h1>浸透タイマー</h1>
-        <p class="hint">水500mlを注いでから、浸透しきるまでの時間を計測してください。</p>
+        <p class="hint">500mlのペットボトルの水を、地面から5cmの高さで一気に注ぎきり、水が完全に浸透するまでの秒数を計測してください。</p>
 
         <div class="timer-display card">${elapsed}<span class="timer-unit">秒</span></div>
 

@@ -38,11 +38,14 @@ async function buildSiteRows() {
   return rows;
 }
 
-export async function renderSiteList(container, { onNewSite, onMeasureAfter }) {
+export async function renderSiteList(container, { onNewSite, onMeasureAfter, onShowGuide, onViewObservation }) {
   container.innerHTML = `
     <div class="site-list-view">
       <div class="site-list-header">
-        <h1>マイ地点一覧</h1>
+        <div class="site-list-header-top">
+          <h1>マイ地点一覧</h1>
+          <button type="button" class="link-button" data-action="guide">ⓘ 使い方</button>
+        </div>
         <button type="button" class="primary" data-action="new-site">新しい地点を計測</button>
       </div>
       <div class="site-list-body">読み込み中...</div>
@@ -50,6 +53,7 @@ export async function renderSiteList(container, { onNewSite, onMeasureAfter }) {
   `;
 
   container.querySelector('[data-action="new-site"]').addEventListener('click', onNewSite);
+  container.querySelector('[data-action="guide"]').addEventListener('click', onShowGuide);
 
   const bodyEl = container.querySelector('.site-list-body');
   const rows = await buildSiteRows();
@@ -74,11 +78,11 @@ export async function renderSiteList(container, { onNewSite, onMeasureAfter }) {
                   ${observations
                     .map(
                       (obs) => `
-                        <div class="observation-chip">
+                        <button type="button" class="observation-chip" data-obs-id="${obs.id}">
                           <span class="obs-phase">${PHASE_LABELS[obs.phase]}</span>
                           <span class="obs-date">${formatDateTime(obs.created_at)}</span>
                           ${!obs.synced ? '<span class="sync-badge">未同期</span>' : ''}
-                        </div>
+                        </button>
                       `
                     )
                     .join('')}
@@ -98,6 +102,15 @@ export async function renderSiteList(container, { onNewSite, onMeasureAfter }) {
     btn.addEventListener('click', () => {
       const site = rows.find((r) => r.site.id === btn.dataset.siteId).site;
       onMeasureAfter(site);
+    });
+  });
+
+  bodyEl.querySelectorAll('.observation-chip').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const siteId = btn.closest('.site-row').dataset.siteId;
+      const row = rows.find((r) => r.site.id === siteId);
+      const observation = row.observations.find((o) => o.id === btn.dataset.obsId);
+      onViewObservation(observation);
     });
   });
 }

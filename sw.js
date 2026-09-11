@@ -1,4 +1,4 @@
-const CACHE_NAME = 'yano-theory-cache-v5';
+const CACHE_NAME = 'yano-theory-cache-v6';
 
 const PRECACHE_ASSETS = [
   './',
@@ -13,6 +13,7 @@ const PRECACHE_ASSETS = [
   './views/siteList.js',
   './views/measurementFlow.js',
   './views/completion.js',
+  './views/guide.js',
   './manifest.json',
   './icons/icon-192.png',
   './icons/icon-512.png',

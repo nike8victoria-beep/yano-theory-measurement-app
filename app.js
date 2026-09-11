@@ -3,6 +3,7 @@ import { hasSeenOnboarding, renderOnboarding } from './views/onboarding.js';
 import { renderSiteList } from './views/siteList.js';
 import { renderMeasurementFlow } from './views/measurementFlow.js';
 import { renderCompletion } from './views/completion.js';
+import { renderGuide } from './views/guide.js';
 import { startAutoSync, syncPendingData } from './sync.js';
 
 const appEl = document.getElementById('app');
@@ -15,7 +16,13 @@ function showSiteList() {
   renderSiteList(appEl, {
     onNewSite: () => startMeasurementFlow(null),
     onMeasureAfter: (site) => startMeasurementFlow(site),
+    onShowGuide: showGuide,
+    onViewObservation: (observation) => showObservationDetail(observation),
   });
+}
+
+function showGuide() {
+  renderGuide(appEl, { onBack: showSiteList });
 }
 
 function startMeasurementFlow(site) {
@@ -23,7 +30,13 @@ function startMeasurementFlow(site) {
     site,
     onCancel: showSiteList,
     onComplete: (draft) => completeMeasurement(draft),
+    onShowGuide: showGuide,
   });
+}
+
+async function showObservationDetail(observation) {
+  const site = await db.getSite(observation.site_id);
+  renderCompletion(appEl, { observation, site, onBack: showSiteList, title: '投稿内容' });
 }
 
 async function completeMeasurement(draft) {

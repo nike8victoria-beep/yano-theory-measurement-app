@@ -18,9 +18,9 @@ function formatDateTime(isoString) {
  * conversion is performed, per spec section 5/9.
  *
  * @param {HTMLElement} container
- * @param {{ observation: object, site: object, onBack: () => void }} options
+ * @param {{ observation: object, site: object, onBack: () => void, title?: string }} options
  */
-export async function renderCompletion(container, { observation, site, onBack }) {
+export async function renderCompletion(container, { observation, site, onBack, title = '投稿が完了しました' }) {
   const objectUrls = [];
   function toUrl(blob) {
     if (!blob) return null;
@@ -71,7 +71,7 @@ export async function renderCompletion(container, { observation, site, onBack })
 
   container.innerHTML = `
     <div class="completion-view">
-      <h1>投稿が完了しました</h1>
+      <h1>${title}</h1>
 
       <div class="card">
         <div class="field-label">地点</div>

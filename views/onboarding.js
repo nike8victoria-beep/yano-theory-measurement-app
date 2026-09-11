@@ -4,17 +4,24 @@ const SLIDES = [
   {
     icon: '🪨',
     title: '① 土壌の質感',
-    body: '地面をタップで触れる感覚で評価します。「カチカチ」「普通」「フカフカ」の3段階から選びます。',
+    body: '<p>地面をタップで触れる感覚で評価します。「カチカチ」「普通」「フカフカ」の3段階から選びます。</p>',
   },
   {
     icon: '🌤️',
     title: '② 表層の見た目・日照',
-    body: '表層の写真を1枚撮影し、その場所が「日向」「半日陰」「日陰」のどれに当たるかを選びます。',
+    body: '<p>表層の写真を1枚撮影し、その場所が「日向」「半日陰」「日陰」のどれに当たるかを選びます。</p>',
   },
   {
     icon: '💧',
     title: '③ 水はけ',
-    body: '画面内のタイマーを使い、水500mlを注いでから浸透しきるまでの秒数を計測します。',
+    body: `
+      <p>画面内のタイマーで、水が地面に浸透しきるまでの秒数を計測します。誰が計っても同じ条件になるよう、次の手順で行ってください。</p>
+      <ol class="onboarding-steps">
+        <li>500mlのペットボトルを用意し、水を約500ml入れます。</li>
+        <li>ペットボトルの口を下にして、地面から約5cm離します。</li>
+        <li>そのまま水を注ぎきり、ペットボトルが空になった瞬間から、水が地面に完全に浸透するまでの秒数を計測します。</li>
+      </ol>
+    `,
   },
 ];
 
@@ -34,7 +41,7 @@ export function renderOnboarding(container, { onFinish }) {
         <div class="onboarding-slide card">
           <div class="onboarding-icon">${slide.icon}</div>
           <h1>${slide.title}</h1>
-          <p>${slide.body}</p>
+          <div class="onboarding-body">${slide.body}</div>
         </div>
         <div class="onboarding-dots">
           ${SLIDES.map((_, i) => `<span class="dot ${i === index ? 'active' : ''}"></span>`).join('')}
