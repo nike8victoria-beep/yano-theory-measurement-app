@@ -93,9 +93,21 @@ async function init() {
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./sw.js').catch((err) => {
-      console.error('Service worker registration failed:', err);
-    });
+    navigator.serviceWorker
+      .register('./sw.js')
+      .then((registration) => registration.update())
+      .catch((err) => {
+        console.error('Service worker registration failed:', err);
+      });
+  });
+
+  // Reload once a new service worker takes over, so an update actually
+  // shows the new content instead of silently sitting in the background.
+  let refreshingAfterUpdate = false;
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if (refreshingAfterUpdate) return;
+    refreshingAfterUpdate = true;
+    window.location.reload();
   });
 }
 
