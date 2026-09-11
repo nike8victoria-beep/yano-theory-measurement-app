@@ -43,11 +43,11 @@ export function renderMeasurementFlow(container, { site, onCancel, onComplete, o
     if (step === 1) {
       renderStep1(container, draft, { site, onCancel, onNext: () => goTo(2), onShowGuide });
     } else if (step === 2) {
-      renderStep2(container, draft, { onBack: () => goTo(1), onNext: () => goTo(3) });
+      renderStepPhoto(container, draft, { onBack: () => goTo(1), onNext: () => goTo(3) });
     } else if (step === 3) {
-      renderStep3(container, draft, { onBack: () => goTo(2), onNext: () => goTo(4) });
+      renderStepTextureSunlight(container, draft, { onBack: () => goTo(2), onNext: () => goTo(4) });
     } else if (step === 4) {
-      renderStep4(container, draft, { onBack: () => goTo(3), onComplete: () => onComplete(draft) });
+      renderStepTimer(container, draft, { onBack: () => goTo(3), onComplete: () => onComplete(draft) });
     }
   }
 
@@ -165,60 +165,14 @@ async function renderStep1(container, draft, { site, onCancel, onNext, onShowGui
   fetchLocation();
 }
 
-// ---- STEP2: 質感・日照 ----
+// ---- STEP2: 写真撮影 ----
 
-function renderStep2(container, draft, { onBack, onNext }) {
+function renderStepPhoto(container, draft, { onBack, onNext }) {
   renderStepShell(container, {
-    stepLabel: 'STEP2 / 4 ・ 質感・日照',
-    bodyHtml: `
-      <h1>質感・日照</h1>
-
-      <div class="field-label">① 土壌の質感</div>
-      <div class="choice-grid" data-group="texture">
-        ${Object.entries(TEXTURE_LABELS)
-          .map(([value, label]) => `<button type="button" class="choice-btn ${draft.texture === value ? 'active' : ''}" data-value="${value}">${label}</button>`)
-          .join('')}
-      </div>
-
-      <div class="field-label">② 表層の見た目・日照</div>
-      <div class="choice-grid" data-group="sunlight">
-        ${Object.entries(SUNLIGHT_LABELS)
-          .map(([value, label]) => `<button type="button" class="choice-btn ${draft.sunlight === value ? 'active' : ''}" data-value="${value}">${label}</button>`)
-          .join('')}
-      </div>
-
-      <div class="step-actions">
-        <button type="button" class="secondary" data-action="back">戻る</button>
-        <button type="button" class="primary" data-action="next" ${draft.texture && draft.sunlight ? '' : 'disabled'}>次へ</button>
-      </div>
-    `,
-  });
-
-  container.querySelectorAll('[data-group="texture"] .choice-btn').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      draft.texture = btn.dataset.value;
-      renderStep2(container, draft, { onBack, onNext });
-    });
-  });
-
-  container.querySelectorAll('[data-group="sunlight"] .choice-btn').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      draft.sunlight = btn.dataset.value;
-      renderStep2(container, draft, { onBack, onNext });
-    });
-  });
-
-  container.querySelector('[data-action="back"]').addEventListener('click', onBack);
-  container.querySelector('[data-action="next"]').addEventListener('click', onNext);
-}
-
-// ---- STEP3: 写真撮影 ----
-
-function renderStep3(container, draft, { onBack, onNext }) {
-  renderStepShell(container, {
-    stepLabel: 'STEP3 / 4 ・ 写真撮影',
+    stepLabel: 'STEP2 / 4 ・ 写真撮影',
     bodyHtml: `
       <h1>写真撮影</h1>
+      <p class="hint">移植ゴテを地面に立て、柄の先端くらいの高さにスマホを構えて、真上から撮影してください。ズーム操作は使わないでください(機種によるズーム倍率の差を避けるため)。</p>
 
       <div class="photo-area card">
         ${draft.photoPreviewUrl ? `<img class="photo-preview" src="${draft.photoPreviewUrl}" alt="撮影した写真">` : '<p class="empty-hint">まだ写真がありません</p>'}
@@ -243,7 +197,56 @@ function renderStep3(container, draft, { onBack, onNext }) {
     if (draft.photoPreviewUrl) URL.revokeObjectURL(draft.photoPreviewUrl);
     draft.photo_blob = file;
     draft.photoPreviewUrl = URL.createObjectURL(file);
-    renderStep3(container, draft, { onBack, onNext });
+    renderStepPhoto(container, draft, { onBack, onNext });
+  });
+
+  container.querySelector('[data-action="back"]').addEventListener('click', onBack);
+  container.querySelector('[data-action="next"]').addEventListener('click', onNext);
+}
+
+// ---- STEP3: 質感・日照 ----
+
+function renderStepTextureSunlight(container, draft, { onBack, onNext }) {
+  renderStepShell(container, {
+    stepLabel: 'STEP3 / 4 ・ 質感・日照',
+    bodyHtml: `
+      <h1>質感・日照</h1>
+
+      <div class="field-label">① 移植ゴテを落とした感じ</div>
+      <p class="hint">移植ゴテを腰の高さに持ち、手を自然に離して地面に落としてください。刺さり方・跳ね返り方の感触で選んでください。</p>
+      <div class="choice-grid" data-group="texture">
+        ${Object.entries(TEXTURE_LABELS)
+          .map(([value, label]) => `<button type="button" class="choice-btn ${draft.texture === value ? 'active' : ''}" data-value="${value}">${label}</button>`)
+          .join('')}
+      </div>
+      ${draft.texture ? '<p class="hint">(任意)しゃがんで土の匂いを嗅いでみてください。</p>' : ''}
+
+      <div class="field-label">② 表層の見た目・日照</div>
+      <div class="choice-grid" data-group="sunlight">
+        ${Object.entries(SUNLIGHT_LABELS)
+          .map(([value, label]) => `<button type="button" class="choice-btn ${draft.sunlight === value ? 'active' : ''}" data-value="${value}">${label}</button>`)
+          .join('')}
+      </div>
+
+      <div class="step-actions">
+        <button type="button" class="secondary" data-action="back">戻る</button>
+        <button type="button" class="primary" data-action="next" ${draft.texture && draft.sunlight ? '' : 'disabled'}>次へ</button>
+      </div>
+    `,
+  });
+
+  container.querySelectorAll('[data-group="texture"] .choice-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      draft.texture = btn.dataset.value;
+      renderStepTextureSunlight(container, draft, { onBack, onNext });
+    });
+  });
+
+  container.querySelectorAll('[data-group="sunlight"] .choice-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      draft.sunlight = btn.dataset.value;
+      renderStepTextureSunlight(container, draft, { onBack, onNext });
+    });
   });
 
   container.querySelector('[data-action="back"]').addEventListener('click', onBack);
@@ -252,7 +255,7 @@ function renderStep3(container, draft, { onBack, onNext }) {
 
 // ---- STEP4: 浸透タイマー ----
 
-function renderStep4(container, draft, { onBack, onComplete }) {
+function renderStepTimer(container, draft, { onBack, onComplete }) {
   let timerState = draft.infiltration_time_sec != null ? 'stopped' : 'idle'; // idle | running | stopped
   let startedAt = null;
   let intervalId = null;
@@ -283,7 +286,7 @@ function renderStep4(container, draft, { onBack, onComplete }) {
       stepLabel: 'STEP4 / 4 ・ 浸透タイマー',
       bodyHtml: `
         <h1>浸透タイマー</h1>
-        <p class="hint">500mlのペットボトルの水を、地面から5cmの高さで一気に注ぎきり、水が完全に浸透するまでの秒数を計測してください。</p>
+        <p class="hint">移植ゴテを地面に斜め45度くらいに立てかけ、その中腹を伝わせるように500mlの水をすべて注いでください。注ぎ終わったらタイマーをスタートしてください。</p>
 
         <div class="timer-display card">${elapsed}<span class="timer-unit">秒</span></div>
 

@@ -1,15 +1,13 @@
-const BOTTLE_ILLUSTRATION = `
-  <svg viewBox="0 0 240 190" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="ペットボトルを地面から5cm離して水を注ぐ様子">
-    <rect x="10" y="152" width="220" height="18" rx="9" fill="#5b4632"/>
-    <rect x="98" y="20" width="44" height="72" rx="10" fill="#e9f2ea" stroke="#2f6b3a" stroke-width="3"/>
-    <path d="M110 92 L110 118 L130 118 L130 92 Z" fill="#e9f2ea" stroke="#2f6b3a" stroke-width="3"/>
-    <rect x="108" y="8" width="24" height="14" rx="3" fill="#2f6b3a"/>
-    <path d="M114 122 Q120 132 112 140 Q120 148 114 156" stroke="#4a90c4" stroke-width="4" fill="none" stroke-linecap="round"/>
-    <path d="M126 122 Q120 132 128 140 Q120 148 126 156" stroke="#4a90c4" stroke-width="4" fill="none" stroke-linecap="round"/>
-    <line x1="160" y1="120" x2="160" y2="152" stroke="#6b7268" stroke-width="2"/>
-    <line x1="153" y1="120" x2="167" y2="120" stroke="#6b7268" stroke-width="2"/>
-    <line x1="153" y1="152" x2="167" y2="152" stroke="#6b7268" stroke-width="2"/>
-    <text x="172" y="140" font-size="14" fill="#6b7268" font-family="sans-serif">約5cm</text>
+const TROWEL_ILLUSTRATION = `
+  <svg viewBox="0 0 240 190" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="移植ゴテを地面に45度に立てかけ、水を伝わせて注ぐ様子">
+    <rect x="10" y="150" width="220" height="20" rx="10" fill="#5b4632"/>
+    <g transform="rotate(-45 120 150)">
+      <rect x="112" y="40" width="16" height="70" rx="6" fill="#8a5a2b"/>
+      <path d="M104 108 L136 108 L124 150 L116 150 Z" fill="#c7ced1" stroke="#5b6469" stroke-width="2"/>
+    </g>
+    <path d="M118 66 Q130 96 118 126 Q130 146 121 152" stroke="#4a90c4" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <line x1="150" y1="150" x2="176" y2="124" stroke="#6b7268" stroke-width="2"/>
+    <text x="150" y="118" font-size="14" fill="#6b7268" font-family="sans-serif">約45度</text>
   </svg>
 `;
 
@@ -25,9 +23,14 @@ export function renderGuide(container, { onBack }) {
 
       <section class="card guide-section">
         <h2>① 準備するもの</h2>
-        <p>500mlのペットボトルに、あらかじめ水を約500ml入れて現場に持参してください。</p>
-        <div class="guide-illustration">${BOTTLE_ILLUSTRATION}</div>
-        <p class="hint">毎回同じ量・同じ高さで注ぐことで、Before/Afterの比較がより正確になります。</p>
+        <ul>
+          <li>スマートフォン</li>
+          <li>移植ゴテ(大地の再生講座で使う小型のシャベル)</li>
+          <li>水を500ml入れたペットボトル</li>
+        </ul>
+        <p>計測は移植ゴテを地面に「落とす」「立てかける」だけで、穴を掘ったりはしません。他人の土地で計測する場合は、あらかじめひとこと声をかけてから行ってください。</p>
+        <div class="guide-illustration">${TROWEL_ILLUSTRATION}</div>
+        <p class="hint">水はけの計測では、移植ゴテを地面に約45度で立てかけ、その中腹を伝わせるように500mlの水をすべて注ぎます。毎回同じやり方で行うことで、Before/Afterの比較がより正確になります。</p>
       </section>
 
       <section class="card guide-section">

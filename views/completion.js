@@ -80,7 +80,7 @@ export async function renderCompletion(container, { observation, site, onBack, t
         <p>${PHASE_LABELS[observation.phase]}</p>
         <div class="field-label">投稿日時</div>
         <p>${formatDateTime(observation.created_at)}</p>
-        <div class="field-label">土壌の質感</div>
+        <div class="field-label">移植ゴテを落とした感じ</div>
         <p>${TEXTURE_LABELS[observation.texture]}</p>
         <div class="field-label">表層の見た目・日照</div>
         <p>${SUNLIGHT_LABELS[observation.sunlight]}</p>

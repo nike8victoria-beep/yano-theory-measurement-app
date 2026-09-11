@@ -479,7 +479,8 @@ button.link-button {
   margin-bottom: 0;
 }
 
-.guide-section ol {
+.guide-section ol,
+.guide-section ul {
   margin: 0 0 10px;
   padding-left: 20px;
   line-height: 1.6;
